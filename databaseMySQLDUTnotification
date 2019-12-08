@@ -1,0 +1,56 @@
+
+DROP TABLE `DK_HOC_PHAN`, `HOC_PHAN`, `LS_THIETBI`, `SINH_VIEN`, `THONG_BAO`;
+
+
+
+
+USE dut_notification;
+
+CREATE TABLE SINH_VIEN(
+   MaSinhVien varchar(50) NOT null,
+   Ten varchar(50) NOT null,
+   Khoa varchar(50) NOT null,
+   Lop varchar(50) NOT null,
+   Email varchar(50) NOT null,
+   TC varchar(50) NOT null,
+   T4 varchar(50) NOT null,
+   PRIMARY KEY(MaSinhVien)
+);
+
+
+CREATE TABLE LS_THIETBI(
+   MaSinhVien varchar(50) NOT null,
+   Token varchar(255) NOT null,
+
+   FOREIGN KEY (MaSinhVien) REFERENCES SINH_VIEN (MaSinhVien) ON DELETE CASCADE,
+   PRIMARY KEY(MaSinhVien, Token)
+);
+
+
+CREATE TABLE HOC_PHAN(
+   MaHocPhan varchar(50) NOT null,
+   TenHocPhan varchar(50) NOT null,
+   TenLopHocPhan varchar(50) NOT null,
+   TinChi int not null,
+   GiangVien varchar(50) NOT null,
+   LichHoc varchar(50) NOT null,
+   TuanHoc varchar(50) NOT null,
+   PRIMARY KEY(MaHocPhan)
+);
+
+
+CREATE TABLE DK_HOC_PHAN(
+   MaSinhVien varchar(50) NOT null,
+   MaHocPhan varchar(50) NOT null,
+   FOREIGN KEY (MaSinhVien) REFERENCES SINH_VIEN (MaSinhVien) ON DELETE CASCADE,
+   FOREIGN KEY (MaHocPhan) REFERENCES HOC_PHAN (MaHocPhan) ON DELETE CASCADE,
+   PRIMARY KEY(MaSinhVien, MaHocPhan)
+);
+
+CREATE TABLE THONG_BAO(
+   ID int PRIMARY KEY AUTO_INCREMENT,
+   TieuDe varchar(1000) NOT null,
+   NoiDung varchar(5000) NOT null,
+   Loai varchar(50) NOT NULL,
+   DaXem tinyint(1) NOT NULL
+);

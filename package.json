@@ -1,0 +1,26 @@
+{
+  "name": "server-any-question",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "html-entities": "*",
+    "http-errors": "~1.6.3",
+    "jar": "*",
+    "morgan": "~1.9.1",
+    "mysql": "*",
+    "pug": "^2.0.4",
+    "request": "^2.88.0",
+    "socket.io": "latest",
+    "socketio-file-upload": "^0.4.4"
+  },
+  "devDependencies": {
+    "firebase": "*",
+    "firebase-admin": "*"
+  }
+}
