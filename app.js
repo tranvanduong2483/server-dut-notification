@@ -53,6 +53,9 @@ con.connect(function (err) {
 const URL = 'http://sv.dut.udn.vn';
 const URL_ThongBaoChung = "http://sv.dut.udn.vn/G_Thongbao.aspx";
 const URL_ThongBaoThayCo = "http://sv.dut.udn.vn/G_Thongbao_LopHP.aspx";
+
+const URL_LichTuan = "http://dut.udn.vn/Lichtuan21";
+
 const entities = new Entities();
 var list_thong_bao_hien_tai = [];
 
@@ -123,6 +126,21 @@ function get_list_thong_bao($html, $Loai) {
   }
 
   return list_thong_bao;
+}
+
+function getListTuanHoc($html) {
+  const regex1 = RegExp(/>Tuần thứ (.*?)<\/option>/, 'g');
+  let array;
+
+  let ListTuanHoc =[];
+  while ((array = regex1.exec($html)) !== null) {
+    let TuanHoc = {};
+    let ans = array[1].split(": ");
+    TuanHoc.Tuan = ans[0];
+    TuanHoc.ThoiGian = ans[1];
+    ListTuanHoc.push(TuanHoc);
+  }
+  return ListTuanHoc;
 }
 
 function setSinhVien1(html, SV) {
@@ -274,6 +292,17 @@ function writeThongBao(ThongBao, MaSinhVien) {
       Loai: ThongBao.Loai,
       DaXem: ThongBao.DaXem
     });
+  }
+}
+
+function writeTuanHocToFireBase(ListTuanHoc) {
+  for (let i = 0; i < ListTuanHoc.length; i++) {
+    let TuanHoc = ListTuanHoc[i];
+    database.ref("TuanHoc/" + TuanHoc.Tuan).set({
+          Tuan: TuanHoc.Tuan,
+          ThoiGian: TuanHoc.ThoiGian
+        }
+    );
   }
 }
 
@@ -483,8 +512,18 @@ app.get("/get-thong-bao-tu-sv-du-udn-vn", function (req, res) {
     }
 
   });
+
+
+  request.get(URL_LichTuan, function (err, res, body) {
+
+    let ListTuanHoc = getListTuanHoc(body);
+
+    if (ListTuanHoc.length === 0) {
+      console.log(`Get list tuan hoc: Lỗi`);
+      return;
+    }
+
+
+    writeTuanHocToFireBase(ListTuanHoc);
+  });
 });
-
-
-
-
