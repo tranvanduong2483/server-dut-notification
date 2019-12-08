@@ -157,7 +157,7 @@ function setSinhVien1(html, SV) {
   SV.Ten = Ten[1];
   SV.Khoa = Khoa[1];
   SV.Lop = Lop[1];
-  SV.Email = Email==null?(SV.MaSinhVien+"http://sv.dut.edu.vn/"):Email[1];
+  SV.Email = Email==null?(SV.MaSinhVien+"@sv.dut.edu.vn"):Email[1];
   return true;
 }
 
