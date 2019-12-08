@@ -150,14 +150,14 @@ function setSinhVien1(html, SV) {
   let Lop = html.match(/<input name=".{0,50}TBlop" type="text" value="(.*?)"/);
   let Email = html.match(/<input name=".{0,50}TBemail2" type="text" value="(.*?)"/);
 
-  if (SV === null || MaSinhVien === null || Ten === null || Khoa === null || Lop === null || Email === null) return false;
+  if (SV === null || MaSinhVien === null || Ten === null || Khoa === null || Lop === null) return false;
 
 
   SV.MaSinhVien = MaSinhVien[1];
   SV.Ten = Ten[1];
   SV.Khoa = Khoa[1];
   SV.Lop = Lop[1];
-  SV.Email = Email[1];
+  SV.Email = Email==null?(MaSinhVien+"http://sv.dut.edu.vn/"):Email[1];
   return true;
 }
 
