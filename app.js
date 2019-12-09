@@ -345,7 +345,6 @@ function getListToken(rows) {
   return registrationTokens;
 }
 
-
 io.sockets.on('connection', function (socket) {
   socket.on('user-request-login', function (MaSinhVien, MatKhau, Token) {
     console.log(MaSinhVien, "********", Token);
