@@ -250,7 +250,14 @@ function sendToFireBaseCouldMessagesing(ThongBao, registrationTokens, callback) 
     }
   };
 
-  admin.messaging().sendToDevice(registrationTokens, payload)
+
+  const options = {
+    priority: "high"
+  };
+
+
+
+  return admin.messaging().sendToDevice(registrationTokens, payload,options)
       .then(function (response) {
         console.log('Successfully sent message:', response);
         callback();
