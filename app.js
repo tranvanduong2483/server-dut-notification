@@ -517,7 +517,7 @@ function LayDuLieu() {
 //Tự động gọi hàm LayDuLieu một cách định kì sau mỗi 5 phút
 var intervalID = setInterval(function () {
     LayDuLieu()
-}, 1000);
+}, 60000*5);
 
 
 
