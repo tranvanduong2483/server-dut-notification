@@ -11,7 +11,7 @@ crypto = require('crypto');
 admin = require("firebase-admin");
 Entities = require('html-entities').XmlEntities;
 
-serviceAccount = require("./push-notification-ff5b1-firebase-adminsdk-a43ae-06fd936c46.json");
+serviceAccount = require("../push-notification-ff5b1-firebase-adminsdk-a43ae-06fd936c46.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
