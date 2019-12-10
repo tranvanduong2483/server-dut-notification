@@ -1,9 +1,6 @@
 
 DROP TABLE `DK_HOC_PHAN`, `HOC_PHAN`, `LS_THIETBI`, `SINH_VIEN`, `THONG_BAO`;
 
-
-
-
 USE dut_notification;
 
 CREATE TABLE SINH_VIEN(

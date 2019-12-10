@@ -704,4 +704,4 @@ function LayDuLieu() {
 };
 
 //Tự động gọi hàm LayDuLieu() một cách định kì sau mỗi 5 phút
-setInterval(LayDuLieu, 1000);
+setInterval(LayDuLieu, 60000*5);
