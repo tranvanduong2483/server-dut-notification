@@ -41,6 +41,7 @@ con.connect(function (err) {
     con.query(sql, function (err, rows) {
         list_thong_bao_hien_tai = rows;
         console.log("list_thong_bao_hien_tai.length = " + list_thong_bao_hien_tai.length);
+        LayDuLieu();
     });
     console.log("MySQL ready!");
 });
