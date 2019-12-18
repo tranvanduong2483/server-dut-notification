@@ -701,7 +701,7 @@ function LayDuLieu() {
         writeTuanHocToFireBase(ListTuanHoc);
     });
 
-};
+}
 
 //Tự động gọi hàm LayDuLieu() một cách định kì sau mỗi 5 phút
-setInterval(LayDuLieu, 60000*5);
+setInterval(LayDuLieu, 60000 * 5);
