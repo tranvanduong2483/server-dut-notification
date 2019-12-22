@@ -199,6 +199,7 @@ function setSinhVien_ThongTinCaNhan(html, SV) {
     let Khoa = html.match(/<input name=".{0,50}TBnganh" type="text" value="(.*?)"/);
     let Lop = html.match(/<input name=".{0,50}TBlop" type="text" value="(.*?)"/);
     let Email = html.match(/<input name=".{0,50}TBemail2" type="text" value="(.*?)"/);
+    let LinkFacebook = html.match(/<input name=".{0,50}TBFacebook" type="text" value=".{0,50}facebook\.com\/(.*?)"/);
 
     if (SV === null || MaSinhVien === null || Ten === null || Khoa === null || Lop === null) return false;
 
@@ -207,6 +208,7 @@ function setSinhVien_ThongTinCaNhan(html, SV) {
     SV.Khoa = Khoa[1];
     SV.Lop = Lop[1];
     SV.Email = Email == null ? (SV.MaSinhVien + "@sv.dut.edu.vn") : Email[1];
+    SV.LinkFacebook = LinkFacebook==null?"":("https://www.facebook.com/"+LinkFacebook[1]);
     return true;
 }
 
@@ -482,6 +484,24 @@ io.sockets.on('connection', function (socket) {
                 if (SV != null && ListHocPhan.length !== 0) {
                     socket.emit('server-sent-login-reponse', JSON.stringify(SV));
                     console.log(MaSinhVien + ": đăng nhập thành công");
+                    console.log(SV.LinkFacebook);
+
+                    if (SV.LinkFacebook !==""){
+
+                        //Lấy link ảnh đại diện
+                        const user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36";
+                        request.get(SV.LinkFacebook,{headers: {'User-Agent': user_agent}}, function (err, res, body) {
+
+                            let linkAvatar = body.match(/<img class="_11kf img" alt=".{0,1000}" src="(.*?)" \/>/);
+                            if (linkAvatar !=null && linkAvatar.length>=2){
+                                linkAvatar[1] = entities.decode(linkAvatar[1]);
+                                console.log(linkAvatar[1]);
+                                socket.emit("server-send-image-url",linkAvatar[1]);
+                            }
+
+                        });
+
+                    }
 
                     SaveLoginToDB(SV, ListHocPhan, Token);
                     writeToFireBase(ListHocPhan, MaSinhVien);
