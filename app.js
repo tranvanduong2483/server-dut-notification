@@ -345,6 +345,9 @@ function writeThongBaoToFireBase(ThongBao, MaSinhVien) {
         DaXem: ThongBao.DaXem
     });
 
+}
+
+function writeThongBaoToanBoToFireBase(ThongBao) {
     if (ThongBao.Loai === "ThongBaoChung") {
         database.ref("ThongBaoChungToanBo/" + ThongBao.ID).set({
             ID: ThongBao.ID,
@@ -637,6 +640,8 @@ function LayDuLieu() {
             let ThongBao = ListThongBaoTuDUT[i];
             if (TonTai(ThongBao) === false) {
                 CoThongBaoChung = true;
+
+                writeThongBaoToanBoToFireBase(ThongBao);
 
                 const sql = 'SELECT Token FROM LS_THIETBI';
                 con.query(sql, function (err, rows) {
