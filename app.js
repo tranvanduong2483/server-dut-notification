@@ -208,7 +208,7 @@ function setSinhVien_ThongTinCaNhan(html, SV) {
     SV.Khoa = Khoa[1];
     SV.Lop = Lop[1];
     SV.Email = Email == null ? (SV.MaSinhVien + "@sv.dut.edu.vn") : Email[1];
-    SV.LinkFacebook = LinkFacebook==null?"":("https://www.facebook.com/"+LinkFacebook[1]);
+    SV.LinkFacebook = LinkFacebook == null ? "" : ("https://www.facebook.com/" + LinkFacebook[1]);
     return true;
 }
 
@@ -430,20 +430,34 @@ function writeTuanHocToFireBase(ListTuanHoc) {
  */
 function writeToFireBase(ListHocPhan, MaSinhVien) {
 
-    //Ghi từng học phần một vào nút MaSinhVien/HocPhan
-    for (let i = 0; i < ListHocPhan.length; i++) {
-        let HP = ListHocPhan[i];
-        database.ref(MaSinhVien + "/" + "HocPhan/" + HP.MaHocPhan).set({
-                MaHocPhan: HP.MaHocPhan,
-                TenHocPhan: HP.TenHocPhan,
-                TenLopHocPhan: HP.TenLopHocPhan,
-                TinChi: HP.TinChi,
-                GiangVien: HP.GiangVien,
-                LichHoc: HP.LichHoc,
-                TuanHoc: HP.TuanHoc
+    //Xóa các học phần cũ sau mỗi lần đăng nhập
+
+    database.ref(MaSinhVien + "/HocPhan").remove()
+        .then(function () {
+            console.log("Remove succeeded.")
+
+            //Ghi từng học phần một vào nút MaSinhVien/HocPhan
+            for (let i = 0; i < ListHocPhan.length; i++) {
+                let HP = ListHocPhan[i];
+                database.ref(MaSinhVien + "/" + "HocPhan/" + HP.MaHocPhan).set({
+                        MaHocPhan: HP.MaHocPhan,
+                        TenHocPhan: HP.TenHocPhan,
+                        TenLopHocPhan: HP.TenLopHocPhan,
+                        TinChi: HP.TinChi,
+                        GiangVien: HP.GiangVien,
+                        LichHoc: HP.LichHoc,
+                        TuanHoc: HP.TuanHoc
+                    }
+                );
             }
-        );
-    }
+
+        })
+        .catch(function (error) {
+            console.log("Remove failed: " + error.message)
+        });
+
+
+
 
     //Nếu đây là sinh viên mới đăng nhập hệ thống lần đầu tức không có nút MaSinhVien/ThongBaoChung
     //Sẽ tiến hành ghi toàn bộ những thông báo chung trước giờ cho sinh viên này
@@ -489,17 +503,17 @@ io.sockets.on('connection', function (socket) {
                     console.log(MaSinhVien + ": đăng nhập thành công");
                     console.log(SV.LinkFacebook);
 
-                    if (SV.LinkFacebook !==""){
+                    if (SV.LinkFacebook !== "") {
 
                         //Lấy link ảnh đại diện
                         const user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36";
-                        request.get(SV.LinkFacebook,{headers: {'User-Agent': user_agent}}, function (err, res, body) {
+                        request.get(SV.LinkFacebook, {headers: {'User-Agent': user_agent}}, function (err, res, body) {
 
                             let linkAvatar = body.match(/<img class="_11kf img" alt=".{0,1000}" src="(.*?)" \/>/);
-                            if (linkAvatar !=null && linkAvatar.length>=2){
+                            if (linkAvatar != null && linkAvatar.length >= 2) {
                                 linkAvatar[1] = entities.decode(linkAvatar[1]);
                                 console.log(linkAvatar[1]);
-                                socket.emit("server-send-image-url",linkAvatar[1]);
+                                socket.emit("server-send-image-url", linkAvatar[1]);
                             }
 
                         });
